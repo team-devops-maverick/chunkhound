@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+echo "Hello"
+
 set -e
 cd "$(dirname "$0")"
 exec npx -y supergateway \
