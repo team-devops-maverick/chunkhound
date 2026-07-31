@@ -15,6 +15,13 @@ pipeline {
         stage('Python Setup') {
             steps {
                 sh '''
+                echo "Hostname: $(hostname)"
+                whoami
+                pwd
+                which python3
+                python3 --version
+
+                python3 -m ensurepip || true
                 python3 -m venv venv
                 source venv/bin/activate
 
