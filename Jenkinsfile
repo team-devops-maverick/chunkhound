@@ -20,13 +20,9 @@ pipeline {
                 pwd
                 which python3
                 python3 --version
-
-                python3 -m ensurepip || true
-                python3 -m venv venv
-                source venv/bin/activate
-
-                pip install --upgrade pip
-                pip install build
+                        curl -LsSf https://astral.sh/uv/install.sh | sh
+        export PATH="$HOME/.local/bin:$PATH"
+        uv --version
                 '''
             }
         }
@@ -35,9 +31,10 @@ pipeline {
         stage('Build Wheel') {
             steps {
                 sh '''
-                source venv/bin/activate
-
-                python -m build
+        uv venv
+        . .venv/bin/activate
+        uv sync
+        uv build
                 '''
             }
         }
