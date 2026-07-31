@@ -48,6 +48,16 @@ pipeline {
                                   fingerprint: true
             }
         }
+        stage('Publish GitHub Release') {
+    steps {
+        sh '''
+        gh release create v${BUILD_NUMBER} \
+            dist/*.whl \
+            --repo team-devops-maverick/chunkhound \
+            --title "Build ${BUILD_NUMBER}" \
+            --notes "Automated release from Jenkins"
+        '''
+    }
     }
         post {
         always {
