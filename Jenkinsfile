@@ -43,6 +43,12 @@ pipeline {
         . .venv/bin/activate
         uv -q sync
                 uv pip install -q -r requirements.txt
+                uv build
+
+        # Verify
+        ls -lah
+        ls -lah dist
+        
                 '''
             }
         }
