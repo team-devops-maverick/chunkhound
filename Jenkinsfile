@@ -41,17 +41,9 @@ pipeline {
                         rm -rf .venv
         uv venv
         . .venv/bin/activate
-        uv sync
+        uv -q sync
                 uv pip install -q -r requirements.txt
                 '''
-            }
-        }
-
-
-        stage('Archive Artifact') {
-            steps {
-                archiveArtifacts artifacts: 'dist/*.whl',
-                                  fingerprint: true
             }
         }
         stage('Publish GitHub Release') {
