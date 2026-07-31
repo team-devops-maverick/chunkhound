@@ -42,10 +42,22 @@ pipeline {
                         . .venv/bin/activate
                         uv -q sync
                         uv pip install -q -r requirements.txt
+                                uv pip install ruff pytest
                         uv build
                 '''
             }
         }
+        stage('Ruff Lint') {
+    steps {
+        sh '''
+        export PATH="$HOME/.local/bin:$PATH"
+        . .venv/bin/activate
+        ruff check .
+        ruff format --check .
+        '''
+    }
+}
+        
         stage('Smoke Test') {
     steps {
         sh '''
