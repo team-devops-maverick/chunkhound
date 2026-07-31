@@ -36,6 +36,7 @@ pipeline {
             steps {
                 sh '''
                         export PATH="$HOME/.local/bin:$PATH"
+                                rm -f dist/*.whl dist/*.tar.gz
                         rm -rf .venv
                         uv venv
                         . .venv/bin/activate
@@ -49,7 +50,7 @@ pipeline {
     steps {
         sh '''
         export PATH="$HOME/.local/bin:$PATH"
-        rm -f dist/*.whl dist/*.tar.gz
+
         rm -rf smoke-test
         uv venv smoke-test
         . smoke-test/bin/activate
