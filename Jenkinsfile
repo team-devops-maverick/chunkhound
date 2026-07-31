@@ -32,10 +32,11 @@ pipeline {
             steps {
                 sh '''
                         export PATH="$HOME/.local/bin:$PATH"
+                        rm -rf .venv
         uv venv
         . .venv/bin/activate
         uv sync
-        uv build
+                uv pip install -r requirements.txt
                 '''
             }
         }
@@ -47,8 +48,13 @@ pipeline {
                                   fingerprint: true
             }
         }
-
-
+    }
+        post {
+        always {
+            sh '''
+            rm -rf .venv
+            '''
+        }
     }
 
 }
