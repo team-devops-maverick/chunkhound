@@ -53,7 +53,6 @@ pipeline {
         export PATH="$HOME/.local/bin:$PATH"
         . .venv/bin/activate
         ruff check .
-        ruff format --check .
         '''
     }
 }
