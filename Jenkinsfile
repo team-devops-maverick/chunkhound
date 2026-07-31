@@ -59,6 +59,7 @@ pipeline {
         '''
     }
     }
+    }
         post {
         always {
             sh '''
