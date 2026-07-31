@@ -42,7 +42,7 @@ pipeline {
         uv venv
         . .venv/bin/activate
         uv sync
-                uv pip install -r requirements.txt
+                uv pip install -q -r requirements.txt
                 '''
             }
         }
