@@ -31,6 +31,7 @@ pipeline {
         stage('Build Wheel') {
             steps {
                 sh '''
+                        export PATH="$HOME/.local/bin:$PATH"
         uv venv
         . .venv/bin/activate
         uv sync
