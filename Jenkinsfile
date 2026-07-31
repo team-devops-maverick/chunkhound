@@ -24,11 +24,9 @@ pipeline {
                 pwd
                 which python3
                 python3 --version
-                        echo "HOME=$HOME"
-        gh auth status || true
-                        curl -LsSf https://astral.sh/uv/install.sh | sh
-        export PATH="$HOME/.local/bin:$PATH"
-        uv --version
+                curl -LsSf https://astral.sh/uv/install.sh | sh
+                export PATH="$HOME/.local/bin:$PATH"
+                uv --version
                 '''
             }
         }
@@ -39,11 +37,11 @@ pipeline {
                 sh '''
                         export PATH="$HOME/.local/bin:$PATH"
                         rm -rf .venv
-        uv venv
-        . .venv/bin/activate
-        uv -q sync
-                uv pip install -q -r requirements.txt
-                uv build
+                        uv venv
+                        . .venv/bin/activate
+                        uv -q sync
+                        uv pip install -q -r requirements.txt
+                        uv build
 
         # Verify
         ls -lah
@@ -52,17 +50,6 @@ pipeline {
                 '''
             }
         }
-        stage('Publish GitHub Release') {
-    steps {
-        sh '''
-        gh release create v${BUILD_NUMBER} \
-            dist/*.whl \
-            --repo team-devops-maverick/chunkhound \
-            --title "Build ${BUILD_NUMBER}" \
-            --notes "Automated release from Jenkins"
-        '''
-    }
-    }
     }
         post {
         always {
