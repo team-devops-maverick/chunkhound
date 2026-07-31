@@ -42,14 +42,28 @@ pipeline {
                         uv -q sync
                         uv pip install -q -r requirements.txt
                         uv build
-
-        # Verify
-        ls -lah
-        ls -lah dist
-        
                 '''
             }
         }
+        stage('Smoke Test') {
+    steps {
+        sh '''
+        export PATH="$HOME/.local/bin:$PATH"
+
+        rm -rf smoke-test
+        uv venv smoke-test
+        . smoke-test/bin/activate
+
+        uv pip install dist/*.whl
+
+        python -c "
+import chunkhound
+print('Version:', getattr(chunkhound, '__version__', 'unknown'))
+print('Import successful')
+"
+        '''
+    }
+}
     }
         post {
         always {
