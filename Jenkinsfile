@@ -52,7 +52,7 @@ pipeline {
         sh '''
         export PATH="$HOME/.local/bin:$PATH"
         . .venv/bin/activate
-        ruff check . --fix
+        ruff check . --fix --unsafe-fixes
         '''
     }
 }
