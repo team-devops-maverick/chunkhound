@@ -64,6 +64,23 @@ print('Import successful')
         '''
     }
 }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+
+                        sh '''
+                        /opt/homebrew/bin/sonar-scanner \
+                          -Dsonar.projectKey=chunkhound \
+                          -Dsonar.projectName=chunkhound \
+                          -Dsonar.sources=. \
+                          -Dsonar.host.url=$SONAR_HOST_URL \
+                          -Dsonar.token=$SONAR_TOKEN
+                        '''
+                    }
+                }
+            }
+        }
         stage('Publish Release') {
     steps {
         withCredentials([string(credentialsId: 'github-token', variable: 'GH_TOKEN')]) {
