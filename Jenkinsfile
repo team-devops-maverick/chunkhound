@@ -3,6 +3,7 @@ pipeline {
     agent any
     environment {
         GH_TOKEN = credentials('github-token')
+        export PATH=$SONAR_SCANNER_HOME/bin:$PATH
     }
 
     stages {
@@ -67,13 +68,13 @@ print('Import successful')
 stage('SonarQube Analysis') {
     steps {
         withSonarQubeEnv('SonarQube') {
-            withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+            withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                 sh '''
                 /opt/sonar-scanner/bin/sonar-scanner \
                   -Dsonar.projectKey=chunkhound \
                   -Dsonar.projectName=chunkhound \
                   -Dsonar.sources=. \
-                  -Dsonar.host.url=$SONAR_HOST_URL \
+                  -Dsonar.host.url=http://4.187.233.237:9000 \
                   -Dsonar.token=$SONAR_TOKEN
                 '''
             }
