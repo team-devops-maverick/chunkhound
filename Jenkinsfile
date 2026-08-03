@@ -1,6 +1,9 @@
 pipeline {
 
     agent any
+    environment {
+        GH_TOKEN = credentials('github-token')
+    }
 
     stages {
 
@@ -59,6 +62,19 @@ print('Version:', getattr(chunkhound, '__version__', 'unknown'))
 print('Import successful')
 "
         '''
+    }
+}
+        stage('Publish Release') {
+    steps {
+        withCredentials([string(credentialsId: 'github-token', variable: 'GH_TOKEN')]) {
+            sh '''
+                gh release create v0.1.1 \
+                  --title "Chunkhound Maverick v0.1.1" \
+                  --notes "Automated Jenkins release" || true
+
+                gh release upload v0.1.1 dist/*.whl --clobber
+            '''
+        }
     }
 }
     }
