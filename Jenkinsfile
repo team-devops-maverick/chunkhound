@@ -10,7 +10,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'feature/my-change',
+                git branch: 'newBranch',
                     url: 'https://github.com/team-devops-maverick/chunkhound.git'
             }
         }
