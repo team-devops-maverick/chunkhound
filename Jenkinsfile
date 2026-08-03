@@ -3,7 +3,7 @@ pipeline {
     agent any
     environment {
         GH_TOKEN = credentials('github-token')
-        export PATH=$SONAR_SCANNER_HOME/bin:$PATH
+         PATH = "/opt/sonar-scanner/bin:${env.PATH}"
     }
 
     stages {
