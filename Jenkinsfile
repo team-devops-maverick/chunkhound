@@ -33,7 +33,7 @@ pipeline {
                 sh '''
                         export PATH="$HOME/.local/bin:$PATH"
                                 rm -f dist/*.whl dist/*.tar.gz
-                        rm -rf .venv
+                        
                         uv venv
                         . .venv/bin/activate
                         uv -q sync
@@ -47,7 +47,7 @@ pipeline {
         sh '''
         export PATH="$HOME/.local/bin:$PATH"
 
-        rm -rf smoke-test
+        
         uv venv smoke-test
         . smoke-test/bin/activate
 
@@ -65,6 +65,7 @@ print('Import successful')
         post {
         always {
             sh '''
+            rm -rf smoke-test
             rm -rf .venv
             '''
         }
