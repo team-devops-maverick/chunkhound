@@ -65,11 +65,25 @@ print('Import successful')
         '''
     }
 }
+        stage('Publish Release') {
+    steps {
+        withCredentials([string(credentialsId: 'github-token', variable: 'GH_TOKEN')]) {
+            sh '''
+                gh release create v0.1.1 \
+                  --title "Chunkhound Maverick v0.1.1" \
+                  --notes "Automated Jenkins release" || true
+
+                gh release upload v0.1.1 dist/*.whl --clobber
+            '''
+        }
+    }
+}
     }
         post {
         always {
             sh '''
             rm -rf .venv
+             rm -rf smoke-test
             '''
         }
     }
