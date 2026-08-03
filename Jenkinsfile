@@ -3,7 +3,7 @@ pipeline {
     agent any
     environment {
         GH_TOKEN = credentials('github-token')
-         PATH = "/opt/sonar-scanner/bin:${env.PATH}"
+         PATH = "/home/azureuser/1project/chunkhound:${env.PATH}"
     }
 
     stages {
