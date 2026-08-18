@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-vcs", "packaging>=21.0", "zstandard>=0.23.0"]
 build-backend = "hatchling.build"
 
 [project]
-name = "chunkhound"
+name = "chunkhound-maverick"
 dynamic = ["version"]
 description = "Local-first codebase intelligence for AI assistants via MCP"
 readme = "README.md"
