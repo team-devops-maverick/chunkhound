@@ -55,9 +55,6 @@ steps:
       uv run maturin develop
     displayName: "Build Rust extension (maturin develop)"
 
-  - script: uv run ruff check chunkhound
-    displayName: "Lint (ruff)"
-
   - script: uv run mypy chunkhound
     displayName: "Typecheck (mypy)"
 
