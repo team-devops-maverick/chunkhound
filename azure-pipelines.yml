@@ -1,0 +1,73 @@
+# Core CI for chunkhound on Azure DevOps.
+#
+# This is a leaner counterpart to .github/workflows/ci.yml's "tests" job:
+# lint, typecheck, Rust checks/tests, and pytest on Linux/Python 3.14 only.
+# Docs-site build, the macOS/Windows matrix, GitHub Pages deploy, and the
+# Watchman runtime-validation/wheel-verification jobs stay in GitHub Actions.
+
+trigger:
+  branches:
+    include:
+      - main
+
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  PYTHON_VERSION: "3.14"
+
+steps:
+  - checkout: self
+    fetchDepth: 0 # hatch-vcs derives the version from git tags
+
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: $(PYTHON_VERSION)
+    displayName: "Set up Python $(PYTHON_VERSION)"
+
+  - script: |
+      curl -LsSf https://astral.sh/uv/install.sh | sh
+      echo "##vso[task.prependpath]$HOME/.local/bin"
+    displayName: "Install uv"
+
+  - script: rustup update stable
+    displayName: "Update Rust stable toolchain"
+
+  - script: cargo fmt --check
+    displayName: "Check Rust formatting"
+
+  - script: cargo clippy --all-targets -- -D warnings
+    displayName: "Clippy (Rust lints)"
+
+  - script: cargo test
+    displayName: "Run Rust unit tests"
+
+  - script: uv sync --locked
+    displayName: "Install dependencies"
+
+  - script: |
+      uv pip install maturin
+      uv run maturin develop
+    displayName: "Build Rust extension (maturin develop)"
+
+  - script: uv run ruff check chunkhound
+    displayName: "Lint (ruff)"
+
+  - script: uv run mypy chunkhound
+    displayName: "Typecheck (mypy)"
+
+  - script: uv run pytest tests/ -v --junit-xml=test-results.xml
+    displayName: "Run tests"
+
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: "JUnit"
+      testResultsFiles: "test-results.xml"
+      failTaskOnFailedTests: true
+    displayName: "Publish test results"
